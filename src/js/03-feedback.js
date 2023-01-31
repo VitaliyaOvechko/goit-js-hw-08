@@ -7,29 +7,38 @@ const refs = {
 }
 
 refs.form.addEventListener('submit', onFormSubmit);
-refs.input.addEventListener('input', onEmailInput);
-refs.textarea.addEventListener('input', onTextarealInput)
+refs.form.addEventListener('input', throttle(onInput, 500));
 
+
+const formText = {};
+onLoadingPage();
 
 function onFormSubmit(evt) {
     evt.preventDefault();
     console.log("Send form");
     
     evt.currentTarget.reset();
+    localStorage.removeItem('feedback-form-state');
+    console.log(formText);
 }
 
-function onEmailInput(evt) {
-    const emailValue = evt.currentTarget.value;
+function onInput(evt) {
+    formText[evt.target.name] = evt.target.value;
 
-    console.log(emailValue);
-
-    localStorage.setItem('feedback-form-state', JSON.stringify(emailValue))
+    localStorage.setItem('feedback-form-state', JSON.stringify(formText));
 }
 
-function onTextarealInput(evt) {
-    const textarealValue = evt.currentTarget.value;
+function onLoadingPage(evt) {
+    const savedFormText = localStorage.getItem('feedback-form-state');
+    // console.log(savedFormText)
+    if (savedFormText) {
+        const text = JSON.parse(savedFormText);
 
-    console.log(textarealValue);
+        // console.log(text);
+        // console.log(text.email);
+        // console.log(text.message);
 
-    localStorage.setItem('feedback-form-state', textarealValue)
+        refs.input.value = text.email;
+        refs.textarea.value = text.message;
+    }
 }
