@@ -20,6 +20,7 @@ function onFormSubmit(evt) {
     evt.currentTarget.reset();
     localStorage.removeItem('feedback-form-state');
     console.log(formText);
+    clearForm();
 }
 
 function onInput(evt) {
@@ -29,6 +30,8 @@ function onInput(evt) {
 }
 
 function onLoadingPage(evt) {
+    clearForm();
+
     const savedFormText = localStorage.getItem('feedback-form-state');
     // console.log(savedFormText)
     if (savedFormText) {
@@ -41,4 +44,18 @@ function onLoadingPage(evt) {
         refs.input.value = text.email;
         refs.textarea.value = text.message;
     }
+}
+
+function clearForm() {
+  for (const elem of refs.form.elements) {
+    if (elem.nodeName === 'BUTTON') {
+
+    // elem.value = '';
+    // formText[elem.name] = '';
+      continue;
+    }
+
+    elem.value = '';
+    formText[elem.name] = '';
+  }
 }
