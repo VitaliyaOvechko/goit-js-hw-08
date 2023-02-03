@@ -49,9 +49,6 @@ function onLoadingPage(evt) {
 function clearForm() {
   for (const elem of refs.form.elements) {
     if (elem.nodeName === 'BUTTON') {
-
-    // elem.value = '';
-    // formText[elem.name] = '';
       continue;
     }
 
