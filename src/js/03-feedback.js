@@ -11,11 +11,10 @@ refs.form.addEventListener('input', throttle(onInput, 500));
 
 
 const formText = {};
-onLoadingPage();
 
 function onFormSubmit(evt) {
     evt.preventDefault();
-    console.log("Send form");
+    // console.log("Send form");
     
     evt.currentTarget.reset();
     localStorage.removeItem('feedback-form-state');
@@ -29,21 +28,34 @@ function onInput(evt) {
     localStorage.setItem('feedback-form-state', JSON.stringify(formText));
 }
 
-function onLoadingPage(evt) {
+
+function onLoadingPage() {
     clearForm();
+    // const savedFormText = localStorage.getItem('feedback-form-state');
+    // // console.log(savedFormText)
+    // if (savedFormText) {
+    //     const text = JSON.parse(savedFormText);
 
-    const savedFormText = localStorage.getItem('feedback-form-state');
-    // console.log(savedFormText)
-    if (savedFormText) {
-        const text = JSON.parse(savedFormText);
+    //     // console.log(text);
+    //     // console.log(text.email);
+    //     // console.log(text.message);
 
-        // console.log(text);
-        // console.log(text.email);
-        // console.log(text.message);
+    //     refs.input.value = text.email;
+    //     refs.textarea.value = text.message;
+    // }
+    try {
+    const value = JSON.parse(localStorage.getItem('feedback-form-state'));
+      for (const elem of refs.form.elements) {
+      const valueEl = value[elem.name];
 
-        refs.input.value = text.email;
-        refs.textarea.value = text.message;
+      if (valueEl) {
+        elem.value = valueEl;
+        formText[elem.name] = valueEl;
+      }
     }
+  } catch {
+    localStorage.removeItem('feedback-form-state');
+  }
 }
 
 function clearForm() {
@@ -56,3 +68,5 @@ function clearForm() {
     formText[elem.name] = '';
   }
 }
+
+onLoadingPage();
